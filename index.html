@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 	<meta charset="UTF-8">
 	<title>socet.io messanger</title>
@@ -15,7 +15,13 @@
 	</style>
 </head>
 <body>
-	<ul id= "messages"></ul>
+	<ul id="messages"></ul>
 	<form action=""><input id="m" autocomplete="off" /> <button> Отправить </button></form>
 </body>
+
+<script src = "/socket.io/socket.io.js"></script>
+<script>
+	const socket = io.connect('http://localhost:3000');
+</script>
+<script src="/static/app.js"></script>
 </html>
