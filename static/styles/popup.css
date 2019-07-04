@@ -1,0 +1,29 @@
+.popup {
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 380px;
+  border-radius: 15px;
+  overflow: hidden;
+  background-color: #fff;
+  visibility: hidden;
+  z-index: -10;
+}
+.popup__heaer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ff8663;
+  padding: 10px 15px;
+}
+.popup__body {
+  padding: 10px 15px;
+}
+.popup--visible {
+  visibility: visible;
+  z-index: 10;
+}
+.address {
+  color: #fff;
+  font-size: 12px;
+}
