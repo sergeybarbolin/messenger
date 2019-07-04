@@ -21,8 +21,17 @@ app.use('/static', express.static(path.join(__dirname, 'static')));
 io.on('connection', socket => {
 	
 	socket.on('login', (user, users = global.users) => {
-		user.key = socket.id;
-		users[socket.id] = user;
+		// console.log(Object.values(users).find(item => item.nickname === user.nickname));
+		const searchElement = Object.values(users).find(item => item.nickname === user.nickname);
+
+		if (searchElement) {
+			users[searchElement.key] = socket.id;
+			return;
+		} else {
+			user.key = socket.id;
+			users[socket.id] = user;
+		}
+
 		io.emit('login', user, users);
 
 		console.log(`${user.nickname} conected`);
