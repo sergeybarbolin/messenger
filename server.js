@@ -21,18 +21,21 @@ app.use('/static', express.static(path.join(__dirname, 'static')));
 io.on('connection', socket => {
 	
 	socket.on('login', (user, users = global.users) => {
-		// console.log(Object.values(users).find(item => item.nickname === user.nickname));
-		const searchElement = Object.values(users).find(item => item.nickname === user.nickname);
-
-		if (searchElement) {
-			users[searchElement.key] = socket.id;
-			return;
+		const searchUser = Object.values(users).find(item => item.nickname === user.nickname && item.name === user.name);
+		
+		if (searchUser) {
+			users[socket.id] = searchUser;
+			user = users[socket.id];
+			delete users[searchUser.key];
 		} else {
-			user.key = socket.id;
 			users[socket.id] = user;
 		}
+		user.key = socket.id;
+		user.online = true;
 
-		io.emit('login', user, users);
+		const onlineUsers = Object.values(users).filter(item => item.online);
+
+		io.emit('login', user, onlineUsers);
 
 		console.log(`${user.nickname} conected`);
 	})
@@ -42,9 +45,11 @@ io.on('connection', socket => {
 	})
 
 	socket.on('disconnect', key => {
-		// delete global.users[socket.id];
+		if (users[socket.id]) {
+			users[socket.id].online = false;
+			console.log(`disconnected ${users[socket.id].nickname}`);
+		}
 		io.emit('disconnect', socket.id);
-
-		console.log(`${global.users[socket.id].nickname} disconnected`);
+		
 	})
 })

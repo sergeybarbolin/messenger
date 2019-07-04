@@ -3,7 +3,6 @@ const input = formSendMessage.querySelector('#m');
 const messages = document.getElementById('messages');
 const usersList = document.getElementById('users');
 
-let statusLogIn = false;
 let socket = null;
 
 const formLogIn = document.querySelector('#log-in');
@@ -33,22 +32,18 @@ const socketLogin = (socket, user) => {
 	})
 
 	socket.on('login', (user, users) => {
-		if (statusLogIn) {
+		const usersFragment = document.createDocumentFragment();
+
+		users.forEach(user => {
 			const userItem = document.createElement('li');
 
-		    userItem.setAttribute('data-key', user.key);
-		    userItem.innerText = user.name;
-		    usersList.append(userItem);
-		} else {
-			Object.keys(users).forEach(key => {
-				const userItem = document.createElement('li');
+			userItem.setAttribute('data-key', user.key);
+			userItem.innerText = user.name;
+			usersFragment.append(userItem);
+		})
 
-			    userItem.setAttribute('data-key', key);
-			    userItem.innerText = users[key].name;
-			    usersList.append(userItem);
-			})
-			statusLogIn = true;
-		}
+		usersList.innerHTML = '';
+		usersList.append(usersFragment);
 	})
 
 	socket.on('disconnect', key => {
@@ -57,7 +52,6 @@ const socketLogin = (socket, user) => {
 		if (disconnectedUser) {
 			disconnectedUser.remove();
 		}
-		statusLogIn = false;
 	})
 }
 
