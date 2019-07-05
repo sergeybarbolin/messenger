@@ -5,7 +5,7 @@ const usersList = document.getElementById('users');
 const formLogIn = document.querySelector('#log-in');
 
 let socket = null;
-
+let currentUser = null;
 
 const formHandler = formIdentifier => {
     const form = document.querySelector(formIdentifier);
@@ -23,7 +23,7 @@ const formHandler = formIdentifier => {
 const socketLogin = (socket, user) => {
 	socket.emit('login', user);
 
-	socket.on('chat message', (message) => {
+	socket.on('chat message', message => {
 	    const messageItem = document.createElement('li');
 
 	    messageItem.innerText = `${message.user.nickname}: ${message.value}`;
@@ -32,6 +32,10 @@ const socketLogin = (socket, user) => {
 	})
 
 	socket.on('login', (user, users, messages) => {
+		if (user.key === socket.id) {
+			currentUser = user;
+		}
+
 		const usersFragment = document.createDocumentFragment();
 
 		users.forEach(user => {
@@ -51,7 +55,7 @@ const socketLogin = (socket, user) => {
 			messages.forEach(message => {
 			    const messageItem = document.createElement('li');
 
-			    messageItem.innerText = `${message.user}: ${message.value}`;
+			    messageItem.innerText = `${message.user.name}: ${message.value}`;
 			    messagesFragment.append(messageItem);
 			})
 
@@ -85,7 +89,7 @@ const socketLogin = (socket, user) => {
 
 formSendMessage.addEventListener('submit', e => {
     e.preventDefault();
-    socket.emit('chat message', inputMessage.value);
+    socket.emit('chat message', { value: inputMessage.value, user: currentUser } );
     inputMessage.value = '';
     return false;
 });

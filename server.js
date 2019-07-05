@@ -25,39 +25,25 @@ app.use('/static', express.static(path.join(__dirname, 'static')));
 io.on('connection', socket => {
 	
 	socket.on('login', (user, users = global.users, messages) => {
-		Object.values(users).forEach(item => {
-			if (item.nickname === user.nickname && item.name === user.name) {
-				users[socket.id] = item;
-				user = users[socket.id];
+		if (!Object.keys(users).length || !users[user.nickname] || users[user.nickname].nickname === user.nickname && users[user.nickname].name === user.name) {
+			users[user.nickname] = user;
+			console.log(`${user.nickname} conected`);
+			user.key = socket.id;
+			user.online = true;
 
-				// console.log(users[socket.id]);
-				delete users[item.key];
-				return;
-			} else if(item.nickname === user.nickname && item.name !== user.name) {
-				console.log('err');
-			} else {
-				users[socket.id] = user;
-			}
-		});
+			onlineUsers = Object.values(users).filter(item => item.online);
 
-		console.log(user);
-
-		user.key = socket.id;
-		user.online = true;
-
-		onlineUsers = Object.values(users).filter(item => item.online);
-
-		const filterMessages = global.messages.filter(msg => !!onlineUsers.find(item => item.nickname === msg.user));
-
-		io.emit('login', user, onlineUsers, filterMessages);
-
-		console.log(`${user.nickname} conected`);
+			const filterMessages = global.messages.filter(msg => users[msg.user.nickname].online);
+			io.emit('login', user, onlineUsers, filterMessages);
+		} else {
+			console.log('Имя не совпадает с ником');
+		}
 	})
 
-	socket.on('chat message', (message, messages = global.messages) => {
-		global.messages.push({ value: message, user: global.users[socket.id].nickname });
+	socket.on('chat message', message => {
+		global.messages.push(message);
 
-		io.emit('chat message', { value: message, user: global.users[socket.id] });
+		io.emit('chat message', message);
 	})
 
 	socket.on('disconnect', (key, messages) => {
@@ -67,9 +53,9 @@ io.on('connection', socket => {
 		}
 		onlineUsers = Object.values(users).filter(item => item.online);
 
-		const filterMessages = global.messages.filter(msg => !!onlineUsers.find(item => item.nickname === msg.user));
+		const filterMessages = global.messages.filter(msg => users[msg.user.nickname].online);
 		
-		io.emit('disconnect', socket.id, filterMessages);
+		io.emit('disconnect', filterMessages);
 		
 	})
 })
