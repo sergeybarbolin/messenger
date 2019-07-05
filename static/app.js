@@ -1,11 +1,11 @@
 const formSendMessage = document.querySelector('#send-message');
-const input = formSendMessage.querySelector('#m');
-const messages = document.getElementById('messages');
+const inputMessage = formSendMessage.querySelector('#m');
+const messagesList = document.getElementById('messages');
 const usersList = document.getElementById('users');
+const formLogIn = document.querySelector('#log-in');
 
 let socket = null;
 
-const formLogIn = document.querySelector('#log-in');
 
 const formHandler = formIdentifier => {
     const form = document.querySelector(formIdentifier);
@@ -23,15 +23,15 @@ const formHandler = formIdentifier => {
 const socketLogin = (socket, user) => {
 	socket.emit('login', user);
 
-	socket.on('chat message', message => {
+	socket.on('chat message', (message) => {
 	    const messageItem = document.createElement('li');
 
-	    console.log(message);
 	    messageItem.innerText = `${message.user.nickname}: ${message.value}`;
-	    messages.append(messageItem);
+	    messagesList.append(messageItem);
+
 	})
 
-	socket.on('login', (user, users) => {
+	socket.on('login', (user, users, messages) => {
 		const usersFragment = document.createDocumentFragment();
 
 		users.forEach(user => {
@@ -44,21 +44,49 @@ const socketLogin = (socket, user) => {
 
 		usersList.innerHTML = '';
 		usersList.append(usersFragment);
+
+		if (messages) {
+			const messagesFragment = document.createDocumentFragment();
+
+			messages.forEach(message => {
+			    const messageItem = document.createElement('li');
+
+			    messageItem.innerText = `${message.user}: ${message.value}`;
+			    messagesFragment.append(messageItem);
+			})
+
+			messagesList.innerHTML = '';
+		    messagesList.append(messagesFragment);
+		}
 	})
 
-	socket.on('disconnect', key => {
+	socket.on('disconnect', (key, messages) => {
 		const disconnectedUser = usersList.querySelector(`li[data-key="${key}"]`);
 
 		if (disconnectedUser) {
 			disconnectedUser.remove();
+		}
+
+		if (messages) {
+			const messagesFragment = document.createDocumentFragment();
+
+			messages.forEach(message => {
+			    const messageItem = document.createElement('li');
+
+			    messageItem.innerText = `${message.user}: ${message.value}`;
+			    messagesFragment.append(messageItem);
+			})
+
+			messagesList.innerHTML = '';
+		    messagesList.append(messagesFragment);
 		}
 	})
 }
 
 formSendMessage.addEventListener('submit', e => {
     e.preventDefault();
-    socket.emit('chat message', input.value);
-    input.value = '';
+    socket.emit('chat message', inputMessage.value);
+    inputMessage.value = '';
     return false;
 });
 
