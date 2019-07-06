@@ -1,13 +1,22 @@
 .popup {
-  position: relative;
+  position: absolute;
   left: 0;
+  right: 0;
   top: 0;
+  margin: auto;
+  padding: 15px;
   width: 380px;
-  border-radius: 15px;
+  border-radius: 0 0 10px 10px;
   overflow: hidden;
-  background-color: #fff;
+  background: #f0f0f0;
   visibility: hidden;
   z-index: -10;
+}
+.title {
+  font-size: 16px;
+  font-family: Arial;
+  font-weight: bold;
+  margin: 5px 0 10px;
 }
 .popup__heaer {
   display: flex;

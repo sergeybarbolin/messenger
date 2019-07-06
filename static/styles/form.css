@@ -1,3 +1,11 @@
+.form {
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+}
+#send-message {
+  display: flex;
+}
 .form__text-field {
   display: block;
   width: 100%;
@@ -11,4 +19,8 @@
 }
 .form__text-field:last-child {
   margin-bottom: 0;
+}
+.form__text--theme-message {
+  margin: 0 10px 0 0;
+  border-radius: 5px;
 }

@@ -41,7 +41,7 @@ io.on('connection', socket => {
 	socket.on('chat message', message => {
 		global.messages.push(message);
 
-		io.emit('chat message', message);
+		io.emit('chat message', message);	
 	})
 
 	socket.on('disconnect', (key, messages, users = global.users) => {

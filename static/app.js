@@ -2,6 +2,7 @@ const formSendMessage = document.querySelector('#send-message');
 const inputMessage = formSendMessage.querySelector('#m');
 const messagesList = document.getElementById('messages');
 const usersList = document.getElementById('users');
+const popup = document.querySelector('.popup');
 const formLogIn = document.querySelector('#log-in');
 
 const currentUserTamplate = document.querySelector('.user--current');
@@ -42,6 +43,7 @@ const socketLogin = (socket, user) => {
 			currentUserNameTamplate.innerText = currentUser.name;
 			countUsersTamplate.innerText = users.length
 			usersTitle.classList.remove('hidden');
+			popup.classList.remove('popup--visible');
 		}
 
 		const usersFragment = document.createDocumentFragment();

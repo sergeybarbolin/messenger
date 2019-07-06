@@ -1,0 +1,31 @@
+.messanger {
+    display: flex;
+    height: 100vh;
+}
+.users {
+    flex: 0 0 250px;
+    background: #ff8663;
+    color: #fff;
+    padding: 10px;
+}
+.users-list {
+    padding-left: 15px;
+}
+.users-list li {
+    margin-bottom: 10px;
+}
+.users__title {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    margin: 20px 0 10px;
+}
+.messages {
+    flex: 0 0 calc(100% - 250px);
+    display: flex;
+    flex-direction: column;
+}
+.messages-list {
+    flex: 1 auto;
+    overflow-y: auto;
+}
