@@ -5,11 +5,9 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 const users = {}
-let onlineUsers = [];
 const messages = [];
 
 global.users = users;
-global.onlineUsers = onlineUsers;
 global.messages = messages;
 
 server.listen(3000, () => {
@@ -31,9 +29,9 @@ io.on('connection', socket => {
 			user.key = socket.id;
 			user.online = true;
 
-			onlineUsers = Object.values(users).filter(item => item.online);
-
+			const onlineUsers = Object.values(users).filter(item => item.online);
 			const filterMessages = global.messages.filter(msg => users[msg.user.nickname].online);
+
 			io.emit('login', user, onlineUsers, filterMessages);
 		} else {
 			console.log('Имя не совпадает с ником');
@@ -46,16 +44,17 @@ io.on('connection', socket => {
 		io.emit('chat message', message);
 	})
 
-	socket.on('disconnect', (key, messages) => {
-		if (users[socket.id]) {
-			users[socket.id].online = false;
-			console.log(`disconnected ${users[socket.id].nickname}`);
-		}
-		onlineUsers = Object.values(users).filter(item => item.online);
+	socket.on('disconnect', (key, messages, users = global.users) => {
+		const userDdisconnected = Object.values(users).find(item => item.key === socket.id);
 
+		if (userDdisconnected) {
+			global.users[userDdisconnected.nickname].online = false;
+		}
+
+		const onlineUsers = Object.values(users).filter(item => item.online);
 		const filterMessages = global.messages.filter(msg => users[msg.user.nickname].online);
-		
-		io.emit('disconnect', filterMessages);
+
+		io.emit('disconnect', socket.id, filterMessages, onlineUsers);
 		
 	})
 })

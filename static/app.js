@@ -4,6 +4,11 @@ const messagesList = document.getElementById('messages');
 const usersList = document.getElementById('users');
 const formLogIn = document.querySelector('#log-in');
 
+const currentUserTamplate = document.querySelector('.user--current');
+const currentUserNameTamplate = currentUserTamplate.querySelector('.user__name');
+const countUsersTamplate = document.querySelector('.users__count');
+const usersTitle = document.querySelector('.users__title');
+
 let socket = null;
 let currentUser = null;
 
@@ -34,6 +39,9 @@ const socketLogin = (socket, user) => {
 	socket.on('login', (user, users, messages) => {
 		if (user.key === socket.id) {
 			currentUser = user;
+			currentUserNameTamplate.innerText = currentUser.name;
+			countUsersTamplate.innerText = users.length
+			usersTitle.classList.remove('hidden');
 		}
 
 		const usersFragment = document.createDocumentFragment();
@@ -64,12 +72,22 @@ const socketLogin = (socket, user) => {
 		}
 	})
 
-	socket.on('disconnect', (key, messages) => {
+	socket.on('disconnect', (key, messages, users) => {
 		const disconnectedUser = usersList.querySelector(`li[data-key="${key}"]`);
+		console.log(users);
 
 		if (disconnectedUser) {
 			disconnectedUser.remove();
 		}
+
+		users.forEach(user => {
+			const usersFragment = document.createDocumentFragment();
+			const userItem = document.createElement('li');
+
+			userItem.setAttribute('data-key', user.key);
+			userItem.innerText = user.name;
+			usersFragment.append(userItem);
+		})
 
 		if (messages) {
 			const messagesFragment = document.createDocumentFragment();
@@ -77,7 +95,7 @@ const socketLogin = (socket, user) => {
 			messages.forEach(message => {
 			    const messageItem = document.createElement('li');
 
-			    messageItem.innerText = `${message.user}: ${message.value}`;
+			    messageItem.innerText = `${message.user.name}: ${message.value}`;
 			    messagesFragment.append(messageItem);
 			})
 
