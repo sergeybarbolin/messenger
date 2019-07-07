@@ -47,9 +47,18 @@ const handleFileSelect = e => {
 	e.stopPropagation();
 	e.preventDefault();
 
-	const [file] = e.dataTransfer.files; 
+	const [file] = e.dataTransfer.files;
 
-	fileReader.readAsDataURL(file);
+	console.log(file);
+	if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+		alert('Файл должен иметь расширение jpg/png');
+	} else if (file.size > 1024 * 1024 * 2) {
+		alert('Файл не должен быть больше 2мб');
+	} else {
+		fileReader.readAsDataURL(file);
+	}
+
+	
 }
 
 const handleDragOver = e => {
@@ -144,6 +153,13 @@ formLogIn.addEventListener('submit', e => {
     const formData = formHandler('#log-in');
 
     socket = io.connect('http://localhost:3000');
+
+	for (let item in formData) {
+		if (!formData[item]) {
+			alert('Поля не должны быть пусты!');
+			return;
+		}
+	}
     socketLogin(socket, formData);
 
     return false;
