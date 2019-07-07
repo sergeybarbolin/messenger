@@ -10,7 +10,7 @@
 		<section class="users">
 			<div class="user user--current">
 				<div class="user__img">
-					<span class="no-img">No photo</span>
+					<img id="user-img" src="static/img/nophoto.jpg" alt="No photo">
 				</div>
 				<span class="user__name title">Добро пожаловать!</span>
 			</div>
@@ -25,15 +25,27 @@
 			</form>
 		</section>
 	</main>
-	<div class="popup popup--visible">
+	<div id="popup-login" class="popup popup--visible">
 		<p class="title">Авторизация:</p>
 		<form id="log-in" class="form" action="log-in">
 		    <input class="form__text-field form__text-field--fix-height" type="text" name="name" placeholder="ФИО">
 		    <input class="form__text-field form__text-field--fix-height" type="text" name="nickname" placeholder="Ник">
-		    <button class="btn" name='log-in' type="submit">Войти</button>
+		    <div class="btns-wrap btns-wrap--right">
+				<button class="btn" type="submit">Войти</button>
+			</div>
 		</form>	
 	</div>
-	
+
+	<div id="popup-file-load" class="popup">
+		<p class="title">Загрузка изображения:</p>
+		<form class="form">
+			<div id="drop_zone">Перетащите сюда фото</div>
+			<div class="btns-wrap btns-wrap--right">
+				<button class="btn" name="cancel" type="button">Отмена</button>
+				<button class="btn" name="load" type="button">Загрузить</button>
+			</div>
+		</form>	
+	</div>
 	
 </body>
 

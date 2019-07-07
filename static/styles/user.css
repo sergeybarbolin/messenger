@@ -1,26 +1,44 @@
 .user {
     display: flex;
+    align-items: flex-start;
+}
+.user--current {
     align-items: center;
 }
+.user--current .user__img {
+    cursor: pointer;
+}
 .user__img {
-    width: 50px;
+    flex: 0 0 50px;
+    margin-right: 10px;
     height: 50px;
     text-align: center;
     background: #fff;
+    border: 1px solid #c4c4c4;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
+    overflow: hidden;
 }
-
+.user__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 .user__name {
     color: #fff;
     margin: 0 0 0 10px;
 }
-
-.no-img {
-    font-size: 13px;
-    font-family: Arial;
-    color: #000;
+.user-message {
+    flex: 1 auto;
+}
+.user-message__name {
+    font-weight: bold;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+.user-message__date {
+    color: #7a7a7a;
 }

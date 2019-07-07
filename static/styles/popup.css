@@ -36,3 +36,17 @@
   color: #fff;
   font-size: 12px;
 }
+#drop_zone {
+    background: #fff;
+    width: 180px;
+    height: 150px;
+    border: 3px dashed #d0d0d0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 13px;
+    color: #7f7f7f;
+    cursor: move;
+    margin: 0 auto 20px;
+}

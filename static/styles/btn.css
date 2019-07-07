@@ -5,6 +5,14 @@
   padding: 5px 10px;
   color: #fff;
   cursor: pointer;
-  display: block;
-  margin-left: auto;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.btns-wrap {
+  display: flex;
+}
+
+.btns-wrap--right {
+  justify-content: flex-end;
 }
