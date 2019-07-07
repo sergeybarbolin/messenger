@@ -49,7 +49,6 @@ const handleFileSelect = e => {
 
 	const [file] = e.dataTransfer.files;
 
-	console.log(file);
 	if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
 		alert('Файл должен иметь расширение jpg/png');
 	} else if (file.size > 1024 * 1024 * 2) {
